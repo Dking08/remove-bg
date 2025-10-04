@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 import requests
 import logging
+from typing import Optional
 
 API_ENDPOINT = "https://api.remove.bg/v1.0/removebg"
 
@@ -9,14 +10,30 @@ _logger = logging.getLogger(__name__)
 
 class RemoveBg(object):
 
-    def __init__(self, api_key, error_log_file):
+    DEFAULT_TIMEOUT = 30  # seconds
+
+    def __init__(
+        self,
+        api_key,
+        error_log_file,
+        timeout: Optional[float] = None,
+        session: Optional[requests.Session] = None,
+    ):
         """Create a new RemoveBg client.
 
         :param api_key: Your remove.bg API key.
         :param error_log_file: Path to a log file. A basic file logger will be
             configured if none exists yet.
+        :param timeout: Optional request timeout (seconds) for each API
+            call (default 30s).
+        :param session: Optional ``requests.Session`` for connection reuse /
+            custom adapters.
         """
         self.__api_key = api_key
+        self._timeout = (
+            timeout if timeout is not None else self.DEFAULT_TIMEOUT
+        )
+        self._session = session or requests.Session()
         # Configure root logging minimally if no handlers exist yet.
         if not logging.getLogger().handlers:
             logging.basicConfig(filename=error_log_file, level=logging.ERROR)
@@ -143,11 +160,12 @@ class RemoveBg(object):
                 elif bg_type == 'url' and bg:
                     data['bg_image_url'] = bg
 
-                response = requests.post(
+                response = self._session.post(
                     API_ENDPOINT,
                     files=files,
                     data=data,
-                    headers={'X-Api-Key': self.__api_key})
+                    headers={'X-Api-Key': self.__api_key},
+                    timeout=self._timeout)
                 response.raise_for_status()
                 if return_bytes:
                     content = response.content
@@ -197,7 +215,9 @@ class RemoveBg(object):
         self._check_arguments(size, type, type_level, format, channels)
 
         if not return_bytes and new_file_name is None:
-            raise ValueError("Either provide new_file_name or set return_bytes=True")
+            raise ValueError(
+                "Either provide new_file_name or set return_bytes=True"
+            )
 
         files = {}
         bg_file_handle = None
@@ -215,11 +235,12 @@ class RemoveBg(object):
             elif bg_type == 'url' and bg:
                 data['bg_image_url'] = bg
 
-            response = requests.post(
+            response = self._session.post(
                 API_ENDPOINT,
                 data=data,
                 files=files if files else None,
-                headers={'X-Api-Key': self.__api_key}
+                headers={'X-Api-Key': self.__api_key},
+                timeout=self._timeout
             )
             response.raise_for_status()
             if return_bytes:
@@ -269,7 +290,9 @@ class RemoveBg(object):
         self._check_arguments(size, type, type_level, format, channels)
 
         if not return_bytes and new_file_name is None:
-            raise ValueError("Either provide new_file_name or set return_bytes=True")
+            raise ValueError(
+                "Either provide new_file_name or set return_bytes=True"
+            )
 
         files = {}
         bg_file_handle = None
@@ -287,11 +310,12 @@ class RemoveBg(object):
             elif bg_type == 'url' and bg:
                 data['bg_image_url'] = bg
 
-            response = requests.post(
+            response = self._session.post(
                 API_ENDPOINT,
                 data=data,
                 files=files if files else None,
-                headers={'X-Api-Key': self.__api_key}
+                headers={'X-Api-Key': self.__api_key},
+                timeout=self._timeout
             )
             response.raise_for_status()
             if return_bytes:

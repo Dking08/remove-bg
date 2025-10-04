@@ -20,6 +20,7 @@ Removes the background given an image file.
 
 | Parameter     | Default Value | Description   |
 | ------------- | ------------- | ------------- |
+| timeout       | `30`          | request timeout in seconds (optional, set when creating `RemoveBg`) |
 | img_file_path | req. param    | path to the source image file |
 | size          | `'regular'`   | size of the output image (`'auto'` = highest available resolution, `'preview'`\|`'small'`\|`'regular'` = 0.25 MP, `'medium'` = 1.5 MP, `'hd'` = 4 MP, `'full'`\|`'4k'` = original size) |
 | type          | `'auto'`      | foreground object (`'auto'` = autodetect, `'person'`, `'product'`, `'animal'`, `'car'`, `'car_interior'`, `'car_part'`, `'transportation'`, `'graphics'`, `'other'`) |
@@ -42,7 +43,7 @@ Removes the background given an image file.
 ```python
 from removebg import RemoveBg
 
-rmbg = RemoveBg("YOUR-API-KEY", "error.log")
+rmbg = RemoveBg("YOUR-API-KEY", "error.log", timeout=15)
 rmbg.remove_background_from_img_file("joker.jpg")
 
 # for new_file_name:
@@ -55,6 +56,7 @@ Removes the background given an image URL.
 
 | Parameter     | Default Value | Description   |
 | ------------- | ------------- | ------------- |
+| timeout       | `30`          | request timeout in seconds (optional, set when creating `RemoveBg`) |
 | img_url       | req. param    | URL to the source image |
 | size          | `'regular'`   | size of the output image (`'auto'` = highest available resolution, `'preview'`\|`'small'`\|`'regular'` = 0.25 MP, `'medium'` = 1.5 MP, `'hd'` = 4 MP, `'full'`\|`'4k'` = original size) |
 | type          | `'auto'`      | foreground object (`'auto'` = autodetect, `'person'`, `'product'`, `'animal'`, `'car'`, `'car_interior'`, `'car_part'`, `'transportation'`, `'graphics'`, `'other'`) |
@@ -77,7 +79,7 @@ Removes the background given an image URL.
 ```python
 from removebg import RemoveBg
 
-rmbg = RemoveBg("YOUR-API-KEY", "error.log")
+rmbg = RemoveBg("YOUR-API-KEY", "error.log", timeout=15)
 rmbg.remove_background_from_img_url("http://www.example.com/some_image.jpg")
 
 # for new_file_name:
@@ -90,6 +92,7 @@ Removes the background given a base64 image string.
 
 | Parameter     | Default Value | Description   |
 | ------------- | ------------- | ------------- |
+| timeout       | `30`          | request timeout in seconds (optional, set when creating `RemoveBg`) |
 | base64_img    | req. param    | base64 image string |
 | size          | `'regular'`   | size of the output image (`'auto'` = highest available resolution, `'preview'`\|`'small'`\|`'regular'` = 0.25 MP, `'medium'` = 1.5 MP, `'hd'` = 4 MP, `'full'`\|`'4k'` = original size) |
 | type          | `'auto'`      | foreground object (`'auto'` = autodetect, `'person'`, `'product'`, `'animal'`, `'car'`, `'car_interior'`, `'car_part'`, `'transportation'`, `'graphics'`, `'other'`) |
@@ -113,7 +116,7 @@ Removes the background given a base64 image string.
 from removebg import RemoveBg
 import base64
 
-rmbg = RemoveBg("YOUR-API-KEY", "error.log")
+rmbg = RemoveBg("YOUR-API-KEY", "error.log", timeout=15)
 with open("joker.jpg", "rb") as image_file:
     encoded_string = base64.b64encode(image_file.read())
 rmbg.remove_background_from_base64_img(encoded_string)
