@@ -35,6 +35,7 @@ Removes the background given an image file.
 | bg            | `None`        | background path / url / color hex (`'81d4fa'`, `'fff'`) / color name (`'green'`) when `bg_type` provided |
 | bg_type       | `None`        | background kind (`'path'`, `'url'`, `'color'`) |
 | new_file_name | `'no-bg.png'` | file name of the result image |
+| return_bytes  |  `'return_bytes'` | return raw image bytes (for service integration) |
 
 #### Code Example (URL)
 
@@ -69,6 +70,7 @@ Removes the background given an image URL.
 | bg            | `None`        | background path / url / color hex (`'81d4fa'`, `'fff'`) / color name (`'green'`) when `bg_type` provided |
 | bg_type       | `None`        | background kind (`'path'`, `'url'`, `'color'`) |
 | new_file_name | `'no-bg.png'` | file name of the result image |
+| return_bytes  |  `'return_bytes'` | return raw image bytes (for service integration) |
 
 #### Code Example (Base64)
 
@@ -103,6 +105,7 @@ Removes the background given a base64 image string.
 | bg            | `None`        | background path / url / color hex (`'81d4fa'`, `'fff'`) / color name (`'green'`) when `bg_type` provided |
 | bg_type       | `None`        | background kind (`'path'`, `'url'`, `'color'`) |
 | new_file_name | `'no-bg.png'` | file name of the result image |
+| return_bytes  |  `'return_bytes'` | return raw image bytes (for service integration) |
 
 #### Code Example
 

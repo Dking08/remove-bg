@@ -97,7 +97,8 @@ class RemoveBg(object):
                                         position="original", channels="rgba",
                                         shadow=False, semitransparency=True,
                                         bg=None, bg_type=None,
-                                        new_file_name="no-bg.png"):
+                                        new_file_name="no-bg.png",
+                                        return_bytes=False):
         """
         Removes the background given an image file.
 
@@ -120,6 +121,7 @@ class RemoveBg(object):
         :param bg: background path/url/color if bg_type set
         :param bg_type: one of "path", "url", "color" (or None)
         :param new_file_name: file name of the result image
+        :param return_bytes: if True, return the raw result bytes.
         :return: None. Result saved to ``new_file_name``.
         """
         self._check_arguments(size, type, type_level, format, channels)
@@ -147,7 +149,13 @@ class RemoveBg(object):
                     data=data,
                     headers={'X-Api-Key': self.__api_key})
                 response.raise_for_status()
-                self._output_file(response, new_file_name)
+                if return_bytes:
+                    content = response.content
+                    if new_file_name:
+                        self._output_file(response, new_file_name)
+                    return content
+                if new_file_name:
+                    self._output_file(response, new_file_name)
         finally:
             if bg_file_handle:
                 try:
@@ -162,7 +170,8 @@ class RemoveBg(object):
                                        position="original", channels="rgba",
                                        shadow=False, semitransparency=True,
                                        bg=None, bg_type=None,
-                                       new_file_name="no-bg.png"):
+                                       new_file_name="no-bg.png",
+                                       return_bytes=False):
         """
         Removes the background given an image URL.
 
@@ -181,9 +190,14 @@ class RemoveBg(object):
     :param bg: background if provided
     :param bg_type: background kind (path/url/color)
         :param new_file_name: file name of the result image
+        :param return_bytes: return raw image bytes instead of / in addition
+            to writing a file.
         """
 
         self._check_arguments(size, type, type_level, format, channels)
+
+        if not return_bytes and new_file_name is None:
+            raise ValueError("Either provide new_file_name or set return_bytes=True")
 
         files = {}
         bg_file_handle = None
@@ -208,7 +222,13 @@ class RemoveBg(object):
                 headers={'X-Api-Key': self.__api_key}
             )
             response.raise_for_status()
-            self._output_file(response, new_file_name)
+            if return_bytes:
+                content = response.content
+                if new_file_name:
+                    self._output_file(response, new_file_name)
+                return content
+            if new_file_name:
+                self._output_file(response, new_file_name)
         finally:
             if bg_file_handle:
                 try:
@@ -223,7 +243,8 @@ class RemoveBg(object):
                                           position="original", channels="rgba",
                                           shadow=False, semitransparency=True,
                                           bg=None, bg_type=None,
-                                          new_file_name="no-bg.png"):
+                                          new_file_name="no-bg.png",
+                                          return_bytes=False):
         """
         Removes the background given a base64 image string.
 
@@ -242,9 +263,13 @@ class RemoveBg(object):
     :param bg: background if provided
     :param bg_type: background kind (path/url/color)
         :param new_file_name: file name of the result image
+        :param return_bytes: return raw image bytes optionally
         """
 
         self._check_arguments(size, type, type_level, format, channels)
+
+        if not return_bytes and new_file_name is None:
+            raise ValueError("Either provide new_file_name or set return_bytes=True")
 
         files = {}
         bg_file_handle = None
@@ -269,7 +294,13 @@ class RemoveBg(object):
                 headers={'X-Api-Key': self.__api_key}
             )
             response.raise_for_status()
-            self._output_file(response, new_file_name)
+            if return_bytes:
+                content = response.content
+                if new_file_name:
+                    self._output_file(response, new_file_name)
+                return content
+            if new_file_name:
+                self._output_file(response, new_file_name)
         finally:
             if bg_file_handle:
                 try:
